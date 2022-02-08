@@ -1,0 +1,17 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.22.0",
+    "@influxdata/influxdb-client-apis": "^1.22.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "influx": "^5.9.2",
+    "morgan": "~1.9.1"
+  }
+}
