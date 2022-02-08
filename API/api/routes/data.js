@@ -1,10 +1,7 @@
 
 var express = require('express');
+var Influx = require('influx');
 var router = express.Router();
-
-import { InfluxDB, measures_station } from '@influxdata/influxdb-client';
-import {url, token, org} from '../javascripts/env';
-
 
 /* GET data measures */
 router.get('/:measure/:date', function(req, res, next) {
@@ -17,25 +14,14 @@ router.get('/:measure/:date', function(req, res, next) {
 
 
   // Connection à la base de donnée
-  // Get a query client configured for your org
-  const queryApi = new InfluxDB({url, token}).getQueryApi(org);
+  const influx = new Influx.InfluxDB('http://user:password@host:8088/measures_station')
 
-  // To avoid SQL injection, use a string literal for the query.
-  const fluxQuery = `from(bucket:"air_sensor")
-                      |> range(start: 0) 
-                      |> filter(fn: (r) => r._measurement == "temperature")`
-  queryApi
-   .queryRaw(fluxQuery)
-   .then(result => {
-     console.log(result);
-     console.log('\nQueryRaw SUCCESS')
-
-     res.json(result);
-   })
-   .catch(error => {
-     console.error(error)
-     console.log('\nQueryRaw ERROR')
-   })
+  influx.query(`
+    select * from ${listMeasure} 
+    where date = ${dates[0]}
+  `)
+  .then( result => response.status(200).json(result) )
+  .catch( error => response.status(500).json({ error }) );
 
 });
 
