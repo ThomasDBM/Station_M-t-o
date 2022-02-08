@@ -23,7 +23,7 @@ router.get('/:measure/:date?', function(req, res, next) {
 
   // Connection à la base de donnée
   const influx = new Influx.InfluxDB('http://localhost:8086/measures_station')
-
+  
   // création de la requête
   let queryString = '';
 
