@@ -22,7 +22,7 @@ router.get('/:measure/:date?', function(req, res, next) {
   }
 
   // Connection à la base de donnée
-  const influx = new Influx.InfluxDB('http://user:password@host:8088/measures_station')
+  const influx = new Influx.InfluxDB('http://localhost:8086/measures_station')
 
   // création de la requête
   let queryString = '';
@@ -36,13 +36,20 @@ router.get('/:measure/:date?', function(req, res, next) {
   } else {
     queryString = `
     select * from ${listMeasure} 
-    where date BETWEEN ${dates[0]} && ${dates[1]}
+    where date >= ${dates[0]} && date <= ${dates[1]}
   `;
   }
 
   influx.query(queryString)
   .then( result => res.status(200).json(result) )
-  .catch( error => res.status(500).json({ error }) );
+  .catch( error => {
+    if (error.code == "400")
+      res.status(400).json({ error })
+    else if (error.code == "404")
+    res.status(404).json({ error })
+    else
+      res.status(500).json({ error })
+  });
 
 });
 
