@@ -47,10 +47,10 @@ router.get('/:measure/:date?', function(req, res, next) {
   .catch( error => {
 
     // Gestion des erreurs à faire
-    // Erreur 400 : Invalid date supplied or 
+    // Erreur 400 : Invalid date supplied
 
     // Erreur 404 : Measure not found 
-    
+
     res.status(500).json({ error })
   });
 

@@ -13,6 +13,8 @@ Copier API dans raspberry
 scp -r ./API pi@piensg032:/home/pi
 ```
 
+Ou mieux cloner le dépot git
+
 Lancer le serveur :
 ```
 DEBUG=api:* npm start
