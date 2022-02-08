@@ -1,0 +1,8 @@
+[Unit]
+Description= update BDD with weather fake data
+
+[Timer]
+OnUnitActiveSec=60
+
+[Install]
+WantedBy=timers.target

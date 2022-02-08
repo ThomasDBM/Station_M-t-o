@@ -1,0 +1,10 @@
+[Unit]
+Description=update BDD with weather fake data
+
+[Service]
+WorkingDirectory=/opt/fakeSonde
+ExecStartPre=/home/pi/fakesonde/UpdateBDD/npm install
+ExecStart=/home/pi/fakesonde/UpdateBDD/npm start
+
+[Install]
+WantedBy=multi-user.target
