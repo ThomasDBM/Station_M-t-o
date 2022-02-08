@@ -3,6 +3,10 @@ var express = require('express');
 var Influx = require('influx');
 var router = express.Router();
 
+// Connection à la base de donnée
+const influx = new Influx.InfluxDB('http://localhost:8086/measures_station')
+
+
 /* GET data measures */
 router.get('/:measure/:date?', function(req, res, next) {
 
@@ -21,21 +25,19 @@ router.get('/:measure/:date?', function(req, res, next) {
     dates.push("CURRENT_TIMESTAMP");
   }
 
-  // Connection à la base de donnée
-  const influx = new Influx.InfluxDB('http://localhost:8086/measures_station')
-  
+
   // création de la requête
   let queryString = '';
 
   // s'il n'y a qu'une date (date courante)
   if (dates.length == 1) {
     queryString = `
-    select * from ${listMeasure} 
+    select * from ${req.params.measure} 
     where date >= ${dates[0]}
   `;
   } else {
     queryString = `
-    select * from ${listMeasure} 
+    select * from ${req.params.measure} 
     where date >= ${dates[0]} && date <= ${dates[1]}
   `;
   }
@@ -43,12 +45,13 @@ router.get('/:measure/:date?', function(req, res, next) {
   influx.query(queryString)
   .then( result => res.status(200).json(result) )
   .catch( error => {
-    if (error.code == "400")
-      res.status(400).json({ error })
-    else if (error.code == "404")
-    res.status(404).json({ error })
-    else
-      res.status(500).json({ error })
+
+    // Gestion des erreurs à faire
+    // Erreur 400 : Invalid date supplied or 
+
+    // Erreur 404 : Measure not found 
+    
+    res.status(500).json({ error })
   });
 
 });
