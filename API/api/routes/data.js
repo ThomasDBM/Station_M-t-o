@@ -2,6 +2,10 @@
 var express = require('express');
 var router = express.Router();
 
+import { InfluxDB, measures_station } from '@influxdata/influxdb-client';
+import {url, token, org} from '../javascripts/env';
+
+
 /* GET data measures */
 router.get('/:measure/:date', function(req, res, next) {
 
@@ -11,22 +15,28 @@ router.get('/:measure/:date', function(req, res, next) {
   // Récuperer les dates si présentes
   let dates = req.params.date.split(',');
 
-  var MongoClient = require('mongodb').MongoClient;
 
-  MongoClient.connect('mongodb://localhost:27017/', function(err, client) {
-    if (err) {
-      throw err;
-    }
-    const db = client.db('test');
-    
-    db.collection('measures_station').find().toArray(function(err, result) {
-      if (err) {
-        throw err;
-      }
-      res.json(result);
-    });
+  // Connection à la base de donnée
+  // Get a query client configured for your org
+  const queryApi = new InfluxDB({url, token}).getQueryApi(org);
 
-  });
+  // To avoid SQL injection, use a string literal for the query.
+  const fluxQuery = `from(bucket:"air_sensor")
+                      |> range(start: 0) 
+                      |> filter(fn: (r) => r._measurement == "temperature")`
+  queryApi
+   .queryRaw(fluxQuery)
+   .then(result => {
+     console.log(result);
+     console.log('\nQueryRaw SUCCESS')
+
+     res.json(result);
+   })
+   .catch(error => {
+     console.error(error)
+     console.log('\nQueryRaw ERROR')
+   })
+
 });
 
 module.exports = router;
