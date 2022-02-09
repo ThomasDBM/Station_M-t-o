@@ -16,7 +16,7 @@ influx.getDatabaseNames()
   })
 
 
-  chokidar.watch('.').on('all', (event, path) => {
+  chokidar.watch('/dev/shm/rainCounter.log').on('all', (event, path) => {
     const date = Date.now()
         influx.writePoints([
         {

@@ -3,9 +3,9 @@ Description=update BDD with weather fake data
 
 [Service]
 Type=oneshot
-WorkingDirectory=/home/pi/fakesonde/UpdateBDD/
-ExecStartPre=/home/pi/fakesonde/UpdateBDD/npm install
-ExecStart=/home/pi/fakesonde/UpdateBDD/npm start
+WorkingDirectory=/home/pi/fakesonde/UpdateBDD/CountBucket
+ExecStartPre=/home/pi/fakesonde/UpdateBDD/CountBucket npm install
+ExecStart=/home/pi/fakesonde/UpdateBDD/CountBucket npm start
 
 [Install] 
 WantedBy=multi-user.target
