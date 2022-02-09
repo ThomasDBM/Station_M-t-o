@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --open",
-    "dev": "npm run serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "dev": "npm run serve"
   },
   "dependencies": {
     "chartist": "0.11.4",
@@ -19,19 +19,21 @@
     "vue-material": "1.0.0-beta-15",
     "vue-router": "3.5.2",
     "vue-social-sharing": "3.0.8",
-    "vue2-leaflet": "^2.7.1"
+    "vue2-leaflet": "^2.7.1",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-eslint": "4.5.13",
     "@vue/cli-plugin-router": "4.5.13",
+    "@vue/cli-plugin-vuex": "^4.5.15",
     "@vue/cli-service": "4.5.13",
     "@vue/eslint-config-prettier": "6.0.0",
     "babel-eslint": "10.1.0",
+    "es6-promise": "4.2.8",
     "eslint": "7.32.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-vue": "7.19.1",
-    "es6-promise": "4.2.8",
     "prettier": "2.4.1",
     "sass": "1.42.1",
     "sass-loader": "10.1.1",

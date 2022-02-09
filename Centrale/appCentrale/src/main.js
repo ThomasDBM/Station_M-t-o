@@ -25,13 +25,13 @@ import routes from "./routes/routes";
 import GlobalComponents from "./globalComponents";
 import GlobalDirectives from "./globalDirectives";
 import Notifications from "./components/NotificationPlugin";
-import 'leaflet/dist/leaflet.css';
-
+import "leaflet/dist/leaflet.css";
 
 // MaterialDashboard plugin
 import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
+import store from "./store";
 
 // configure router
 const router = new VueRouter({
@@ -52,6 +52,8 @@ new Vue({
   el: "#app",
   render: (h) => h(App),
   router,
+  store,
+
   data: {
     Chartist: Chartist,
   },

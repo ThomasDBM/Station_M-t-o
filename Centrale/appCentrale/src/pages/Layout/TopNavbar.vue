@@ -26,26 +26,36 @@
               <p class="hidden-lg hidden-md">Map</p>
             </md-list-item>
 
-             <li class="md-list-item">
-                <div class="md-list-item-content">
-                  <drop-down>
-                    <md-button
-                      slot="title"
-                      class="md-button md-just-icon md-simple"
-                      data-toggle="dropdown"
-                    >
-                      <md-icon>settings_input_antenna</md-icon>
-                      <p class="hidden-lg hidden-md">add Station</p>
-                    </md-button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                      <li><md-checkbox v-model="string" value="piensg27">Sonde 27</md-checkbox></li>
-                      <li><md-checkbox v-model="string" value="piensg28">Sonde 28</md-checkbox></li>
-                      <li><md-checkbox v-model="string" value="piensg30">Sonde 30</md-checkbox></li>
-                      <li><md-checkbox v-model="string" value="piensg31">Sonde 31</md-checkbox></li>
-                      <li><md-checkbox v-model="string" value="piensg32">Sonde 32</md-checkbox></li>
-                    </ul>
-                  </drop-down>
-                </div>
+            <li class="md-list-item">
+              <div class="md-list-item-content">
+                <drop-down>
+                  <md-button
+                    slot="title"
+                    class="md-button md-just-icon md-simple"
+                    data-toggle="dropdown"
+                  >
+                    <md-icon>settings_input_antenna</md-icon>
+                    <p class="hidden-lg hidden-md">add Station</p>
+                  </md-button>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg27">Sonde 27</md-checkbox>
+                    </li>
+                    <li>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg28">Sonde 28</md-checkbox>
+                    </li>
+                    <li>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg30">Sonde 30</md-checkbox>
+                    </li>
+                    <li>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg31">Sonde 31</md-checkbox>
+                    </li>
+                    <li>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg32">Sonde 32</md-checkbox>
+                    </li>
+                  </ul>
+                </drop-down>
+              </div>
             </li>
           </md-list>
         </div>
@@ -55,27 +65,20 @@
 </template>
 
 <script>
+import store from "../../store/index.js"
 export default {
   data() {
     return {
       string : [],
-      selectedEmployee: null,
-      employees: [
-        "Jim Halpert",
-        "Dwight Schrute",
-        "Michael Scott",
-        "Pam Beesly",
-        "Angela Martin",
-        "Kelly Kapoor",
-        "Ryan Howard",
-        "Kevin Malone",
-      ],
     };
   },
   methods: {
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
+    OnChange(){
+      this.$store.commit('SetStations',this.string)
+    }
   },
 };
 </script>
