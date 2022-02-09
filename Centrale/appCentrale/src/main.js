@@ -25,6 +25,8 @@ import routes from "./routes/routes";
 import GlobalComponents from "./globalComponents";
 import GlobalDirectives from "./globalDirectives";
 import Notifications from "./components/NotificationPlugin";
+import 'leaflet/dist/leaflet.css';
+
 
 // MaterialDashboard plugin
 import MaterialDashboard from "./material-dashboard";
