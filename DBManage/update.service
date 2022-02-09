@@ -2,6 +2,7 @@
 Description=update BDD with weather fake data
 
 [Service]
+Type=oneshot
 WorkingDirectory=/opt/fakeSonde
 ExecStartPre=/home/pi/fakesonde/UpdateBDD/npm install
 ExecStart=/home/pi/fakesonde/UpdateBDD/npm start
