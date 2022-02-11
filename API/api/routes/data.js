@@ -12,7 +12,7 @@ const influx = new Influx.InfluxDB('http://localhost:8086/measures_station')
 
 /* GET data measures */
 router.get('/:measure/:date?', function(req, res, next) {
-
+/*
   // Tests avec une fausse base et quelques données
   influx.getDatabaseNames()
   .then(names => {
@@ -48,7 +48,7 @@ router.get('/:measure/:date?', function(req, res, next) {
   })
   .catch(error => {
     console.error(`Error saving data to InfluxDB! ${err.stack}`)
-  });
+  });*/
 
 
   // Récuperer les mesures demandées
@@ -101,7 +101,7 @@ router.get('/:measure/:date?', function(req, res, next) {
 
       measure_name = result['groupRows'][i]['name'];
 
-      console.log(result['groupRows'][i]);
+      //console.log(result['groupRows'][i]);
 
       // Si clé déja présente
       if (measures[measure_name] == undefined) {
@@ -114,19 +114,19 @@ router.get('/:measure/:date?', function(req, res, next) {
 
       // si la clé est windvelocity
       if (measure_name == 'windvelocity') {
-        measures[measure_name]['date'].push(result['groupRows'][i]['rows'][0]['time']._nanoISO);
+        measures[measure_name]['date'].push(new Date(result['groupRows'][i]['rows'][0]['date']).toISOString());
         measures[measure_name]['value'].push([result['groupRows'][i]['rows'][0]['avg'], result['groupRows'][i]['rows']['min'], result['groupRows'][i]['rows']['max']]);
       } // si la clé est GPS
       else if (measure_name == 'gpsposition') {
-        measures[measure_name]['date'].push(result['groupRows'][i]['rows'][0]['time']._nanoISO);
+        measures[measure_name]['date'].push(new Date(result['groupRows'][i]['rows'][0]['date']).toISOString());
         measures[measure_name]['value'].push([result['groupRows'][i]['rows'][0]['lat'], result['groupRows'][i]['rows']['lon'], result['groupRows'][i]['rows']['alt']]);
       } else {
-        measures[measure_name]['date'].push(result['groupRows'][i]['rows'][0]['time']._nanoISO);
+        measures[measure_name]['date'].push(new Date(result['groupRows'][i]['rows'][0]['date']).toISOString());
         measures[measure_name]['value'].push(result['groupRows'][i]['rows'][0]['value']);
       }
 
   };
-  console.log(measures);
+  //console.log(measures);
   res.json(measures)
   })
   /*
