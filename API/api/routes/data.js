@@ -12,50 +12,27 @@ const influx = new Influx.InfluxDB('http://localhost:8086/measures_station')
 
 /* GET data measures */
 router.get('/:measure/:date?', function(req, res, next) {
-/*
-  // Tests avec une fausse base et quelques données
-  influx.getDatabaseNames()
-  .then(names => {
-    if (!names.includes('measures_station')) {
-      console.log('creer');
-      return influx.createDatabase('measures_station');
-    }
-  });
-
-  influx.writePoints([
-    {
-      measurement: 'temperature',
-      fields: { values: 1000, date:1644397306 }
-    }
-  ], {
-    database: 'measures_station',
-  });
-  influx.writePoints([
-    {
-      measurement: 'humidity',
-      fields: {values: 2000, date:1644397306 }
-    }
-  ], {
-    database: 'measures_station',
-  });
-  influx.writePoints([
-    {
-      measurement: 'pressure',
-      fields: { values: 3000, date:1644397306 }
-    }
-  ], {
-    database: 'measures_station',
-  })
-  .catch(error => {
-    console.error(`Error saving data to InfluxDB! ${err.stack}`)
-  });*/
-
 
   // Récuperer les mesures demandées
   let listMeasure = req.params.measure.split(',');
 
+
+  // Vérifier si les mesures sont correctes
+  influx.getMeasurements().then(names => {
+    console.log('My measurement names are: ' + names.join(', '))
+
+    for (let i=0; i < listMeasure.length; i++) {
+      if (names.includes(listMeasure[i])) {
+      } else {
+        console.log('pourquoi ?');
+        return res.status(404).text("Measure not found");
+      }
+    }
+  });
+
+
+
   let dates = [];
-  console.log(req.params);
   // Si la date est fournie
   if (req.params.date != undefined) {
     // Récuperer les dates si présentes
@@ -70,15 +47,14 @@ router.get('/:measure/:date?', function(req, res, next) {
     }
   }
 
-  console.log(dates);
-
   // création de la requête
   let queryString = '';
 
   // s'il n'y a aucunes dates
   if (dates.length == 0) {
     queryString = `
-    select max(date) as date, value from ${req.params.measure}
+    select * from ${req.params.measure}
+    GROUP BY * ORDER BY DESC LIMIT 1;
   `;
   } else {
     queryString = `
@@ -94,54 +70,67 @@ router.get('/:measure/:date?', function(req, res, next) {
 
     let measure_name = "";
 
-    console.log(result);
-
     // Ordonner le résultat :
     for (let i=0; i < result['groupRows'].length; i++) {
 
       measure_name = result['groupRows'][i]['name'];
 
-      //console.log(result['groupRows'][i]);
+      if (measure_name == 'gps_GGA') {
+        measure_name = 'gpsposition';
+      }
+      if (measure_name == 'luminosity') {
+        measure_name = 'brightness';
+      }
 
       // Si clé déja présente
       if (measures[measure_name] == undefined) {
-          measures[measure_name] = {
-            'date' : [],
-            'value' : []
-          }
 
+        if (measure_name == 'wind') {
+          measures['winddirection'] = [];
+          measures['windvelocity'] = [];
+        } else {
+          measures[measure_name] = [];
+        }
       }
 
-      // si la clé est windvelocity
-      if (measure_name == 'windvelocity') {
-        measures[measure_name]['date'].push(new Date(result['groupRows'][i]['rows'][0]['date']).toISOString());
-        measures[measure_name]['value'].push([result['groupRows'][i]['rows'][0]['avg'], result['groupRows'][i]['rows']['min'], result['groupRows'][i]['rows']['max']]);
-      } // si la clé est GPS
-      else if (measure_name == 'gpsposition') {
-        measures[measure_name]['date'].push(new Date(result['groupRows'][i]['rows'][0]['date']).toISOString());
-        measures[measure_name]['value'].push([result['groupRows'][i]['rows'][0]['lat'], result['groupRows'][i]['rows']['lon'], result['groupRows'][i]['rows']['alt']]);
-      } else {
-        measures[measure_name]['date'].push(new Date(result['groupRows'][i]['rows'][0]['date']).toISOString());
-        measures[measure_name]['value'].push(result['groupRows'][i]['rows'][0]['value']);
+      for (let j=0; j < result['groupRows'][i]['rows'].length; j++) {
+        // si la clé est windvelocity
+        if (measure_name == 'wind') {
+
+          measures['winddirection'].push(
+            {
+              'date' : new Date(result['groupRows'][i]['rows'][j]['date']).toISOString(),
+              'value' : result['groupRows'][i]['rows'][j]['wind_heading']
+            });
+          
+          measures['windvelocity'].push(
+            {
+              'date' : new Date(result['groupRows'][i]['rows'][j]['date']).toISOString(),
+              'avg' : result['groupRows'][i]['rows'][j]['wind_avg'],
+              'max' : result['groupRows'][i]['rows'][j]['wind_max'],
+              'min' : result['groupRows'][i]['rows'][j]['wind_min']
+            });
+        } // si la clé est GPS
+        else if (measure_name == 'gpsposition') {
+          measures[measure_name].push(
+          {
+            'latitude' : result['groupRows'][i]['rows'][j]['latitude'],
+            'longitude' : result['groupRows'][i]['rows'][j]['longitude'],
+            'altitude' : result['groupRows'][i]['rows'][j]['altitude']
+          });
+
+        } else {
+          measures[measure_name].push(
+          {
+            'date' : new Date(result['groupRows'][i]['rows'][j]['date']).toISOString(),
+            'value' : result['groupRows'][i]['rows'][j]['values']
+          }); 
+        }
       }
 
   };
-  //console.log(measures);
   res.json(measures)
-  })
-  /*
-  .catch( error => {
-
-    if (result.statusCode == 304) {
-      console.log("erreur 404");
-      res.status(404).text("Measure not found")
-    }
-    if (result.statusCode == 400) {
-      console.log("erreor 400")
-      res.status(400).text("Invalid date supplied")
-    }
-    res.status(500).json({ error })
-  })*/;
+  });
 
 });
 
