@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@drivetech/node-nmea": "^2.0.1",
     "express": "^4.17.2",
     "influx": "^5.9.2"
   },

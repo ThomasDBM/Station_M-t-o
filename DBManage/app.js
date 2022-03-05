@@ -2,7 +2,7 @@ const Influx = require('influx')
 const express = require('express')
 const fs = require('fs');
 const { log } = require('console');
-
+const nmea = require('@drivetech/node-nmea')
 const app = express()
 
 const influx = new Influx.InfluxDB('http://127.0.0.1:8086/measures_station');
@@ -18,10 +18,10 @@ influx.getDatabaseNames()
   })
 
 
-fs.readFile('dev/shm/tph.log','utf8', function(err, data){
+fs.readFile('/dev/shm/tph.log','utf8', function(err, data){
 
   const content = JSON.parse(data);
-  const date = new Date(content['date'].split('.')[0]).getTime()
+  const date = new Date(content['date']).getTime()
 
   influx.writePoints([
     {
@@ -44,7 +44,7 @@ fs.readFile('dev/shm/tph.log','utf8', function(err, data){
 
 })
 
-fs.readFile('dev/shm/sensors','utf8', function(err, data){
+fs.readFile('/dev/shm/sensors','utf8', function(err, data){
   const content = JSON.parse(data);
   const date = new Date(content['date'].split('.')[0]).getTime()
 
@@ -71,15 +71,23 @@ fs.readFile('dev/shm/sensors','utf8', function(err, data){
 
 })
 
-fs.readFile('dev/shm/gpsNmea','utf8', function(err, data){
-  const content = data.split(',');
+fs.readFile('/dev/shm/gpsNmea','utf8', function(err, data){
 
-  influx.writePoints([
-    {
-      measurement: 'gps_GGA',
-      fields: { latitude:parseFloat(content[2]), longitude:parseFloat(content[4]), altitude:parseFloat(content[9]) }
-    }
-  ])
+  const content = nmea.parse('$'+data.split('$')[2].split('\n')[0])
+  const date = new Date(content.datetime).getTime()
+
+influx.writePoints([
+  {
+    measurement: 'gps',
+    fields: { 
+      time:date,
+      latitude:parseFloat(content.loc["geojson"]["coordinates"][1]), 
+      longitude:parseFloat(content.loc["geojson"]["coordinates"][0]), 
+      altitude:parseFloat(0) 
+  }
+  }
+])
 }) 
+
   
   
