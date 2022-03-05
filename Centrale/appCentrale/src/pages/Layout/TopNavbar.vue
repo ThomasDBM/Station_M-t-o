@@ -39,19 +39,19 @@
                   </md-button>
                   <ul class="dropdown-menu dropdown-menu-right">
                     <li>
-                      <md-checkbox v-model="string" @change="OnChange" value="piensg27">Sonde 27</md-checkbox>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg027">Sonde 27</md-checkbox>
                     </li>
                     <li>
-                      <md-checkbox v-model="string" @change="OnChange" value="piensg28">Sonde 28</md-checkbox>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg028">Sonde 28</md-checkbox>
                     </li>
                     <li>
-                      <md-checkbox v-model="string" @change="OnChange" value="piensg30">Sonde 30</md-checkbox>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg030">Sonde 30</md-checkbox>
                     </li>
                     <li>
-                      <md-checkbox v-model="string" @change="OnChange" value="piensg31">Sonde 31</md-checkbox>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg031">Sonde 31</md-checkbox>
                     </li>
                     <li>
-                      <md-checkbox v-model="string" @change="OnChange" value="piensg32">Sonde 32</md-checkbox>
+                      <md-checkbox v-model="string" @change="OnChange" value="piensg032">Sonde 32</md-checkbox>
                     </li>
                   </ul>
                 </drop-down>
