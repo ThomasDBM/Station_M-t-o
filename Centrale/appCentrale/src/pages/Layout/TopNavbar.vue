@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import store from "../../store/index.js"
 export default {
   data() {
     return {
@@ -78,6 +77,7 @@ export default {
     },
     OnChange(){
       this.$store.commit('SetStations',this.string)
+      console.log(this.$store.state.Stations);
     }
   },
 };

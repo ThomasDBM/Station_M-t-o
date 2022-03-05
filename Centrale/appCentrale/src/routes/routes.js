@@ -1,6 +1,7 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
+import DashboardSonde from "@/pages/DashboardSonde.vue";
 import UserProfile from "@/pages/UserProfile.vue";
 import TableList from "@/pages/TableList.vue";
 import Typography from "@/pages/Typography.vue";
@@ -18,6 +19,11 @@ const routes = [
         path: "dashboard",
         name: "Dashboard",
         component: Dashboard,
+      },
+      {
+        path: "dashboardSonde",
+        name: "Sonde",
+        component: DashboardSonde,
       },
       {
         path: "user",

@@ -12,6 +12,10 @@
         <md-icon>dashboard</md-icon>
         <p>Dashboard</p>
       </sidebar-link>
+      <sidebar-link to="/dashboardSonde">
+        <md-icon>settings_input_antenna</md-icon>
+        <p>Sonde</p>
+      </sidebar-link>
       <sidebar-link to="/maps">
         <md-icon>location_on</md-icon>
         <p>Maps</p>
@@ -41,12 +45,6 @@
     <div class="main-panel">
       <top-navbar></top-navbar>
 
-      <fixed-plugin
-        :color.sync="sidebarBackground"
-        :image.sync="sidebarBackgroundImage"
-      >
-      </fixed-plugin>
-
       <dashboard-content> </dashboard-content>
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
@@ -59,7 +57,6 @@ import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import MobileMenu from "@/pages/Layout/MobileMenu.vue";
-import FixedPlugin from "./Extra/FixedPlugin.vue";
 
 export default {
   components: {
@@ -67,7 +64,6 @@ export default {
     DashboardContent,
     ContentFooter,
     MobileMenu,
-    FixedPlugin,
   },
   data() {
     return {
