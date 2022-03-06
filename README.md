@@ -3,14 +3,7 @@
 
 ## Principe
 
-Le but de ce projet
-
-
-## Intaller influxdata
-
-```
-npm install --save influx
-```
+Le but de ce projet 
 
 
 ## Tips
