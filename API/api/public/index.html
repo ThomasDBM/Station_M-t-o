@@ -210,14 +210,14 @@ https://ensg_dei.gitlab.io/web-az/js/exercices/projet-station-meteo/.</div>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
     <pre class="get"><code class="huge"><span class="http-method">get</span> /data/measure/{date}</code></pre></div>
-    <div class="method-summary">All measures specified from the starting date ,if there is only one date, and if there 2 dates, between the dates. (<span class="nickname">dataMeasureDateGet</span>)</div>
-    <div class="method-notes">For valid response use TimeStamp format for date</div>
+    <div class="method-summary">All measures specified from the date parameters ,if there is only one date. Else,if there are 2 dates, all measures between the dates. (<span class="nickname">dataMeasureDateGet</span>)</div>
+    <div class="method-notes">For valid response use Date format for date. Separate dates by a ','.</div>
 
     <h3 class="field-label">Path parameters</h3>
     <div class="field-items">
       <div class="param">date (required)</div>
 
-      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; the date we want format: TimeStamp</div>
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; the date we want format: Date</div>
     </div>  <!-- field-items -->
 
 
@@ -253,7 +253,7 @@ https://ensg_dei.gitlab.io/web-az/js/exercices/projet-station-meteo/.</div>
     <a class="up" href="#__Methods">Up</a>
     <pre class="get"><code class="huge"><span class="http-method">get</span> /data/{measure}</code></pre></div>
     <div class="method-summary">All measures specified from the sensor (<span class="nickname">dataMeasureGet</span>)</div>
-    <div class="method-notes">For valid response try measures separated by ','. The valid measures are Temperature, Hygrometry, Pressure, RainFall, Brightness, WindDirection, WindVelocity, GPSPosition</div>
+    <div class="method-notes">For valid response try measures separated by ','. The valid measures are temperature, hygrometry, pressure, rainfall, brightness, winddirection, windvelocity, gpsposition</div>
 
     <h3 class="field-label">Path parameters</h3>
     <div class="field-items">
@@ -295,7 +295,7 @@ https://ensg_dei.gitlab.io/web-az/js/exercices/projet-station-meteo/.</div>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
     <pre class="get"><code class="huge"><span class="http-method">get</span> /</code></pre></div>
-    <div class="method-summary">Get home page (<span class="nickname">rootGet</span>)</div>
+    <div class="method-summary">Get API documenation page (<span class="nickname">rootGet</span>)</div>
     <div class="method-notes"></div>
 
 
