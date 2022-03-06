@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "express": "^4.17.2",
+    "influx": "^5.9.2"
+  },
+  "scripts": {
+    "start": "node watch.js"
+  }
+}
