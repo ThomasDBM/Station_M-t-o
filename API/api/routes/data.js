@@ -3,37 +3,90 @@ var express = require('express');
 var Influx = require('influx');
 var router = express.Router();
 
-
-const app = express()
+const app = express();
 
 // Connection à la base de donnée
 const influx = new Influx.InfluxDB('http://localhost:8086/measures_station')
 //2022-02-09T10:01:46Z
 
-/* GET data measures */
-router.get('/:measure/:date?', function(req, res, next) {
+function measureGet(nameMeasure,promesse,measure){
 
-  // Récuperer les mesures demandées
-  let listMeasure = req.params.measure.split(',');
+      let measureValueDate = {date:[],value:[]}
 
 
-  // Vérifier si les mesures sont correctes
-  influx.getMeasurements().then(names => {
-    console.log('My measurement names are: ' + names.join(', '))
-
-    for (let i=0; i < listMeasure.length; i++) {
-      if (names.includes(listMeasure[i])) {
-      } else {
-        console.log('pourquoi ?');
-        return res.status(404).text("Measure not found");
+      for (let index = 0; index < promesse['groupRows'][0]['rows'].length; index++) {
+        measureValueDate["date"].push(new Date(promesse['groupRows'][0]['rows'][index]["date"]));
+        measureValueDate["value"].push(promesse['groupRows'][0]['rows'][index]["values"]);
       }
-    }
-  });
 
 
+      measure[nameMeasure] = measureValueDate;
+
+      return measure;
+}
+
+function winddirectionGet(promesse,measure){
+
+  let measureValueDate = {date:[],value:[]}
+
+
+  for (let index = 0; index < promesse['groupRows'][0]['rows'].length; index++) {
+    measureValueDate["date"].push(new Date(promesse['groupRows'][0]['rows'][index]["date"]));
+    measureValueDate["value"].push(promesse['groupRows'][0]['rows'][index]["wind_heading"]);
+  }
+
+  measure["winddirection"] = measureValueDate;
+
+  return measure;
+
+}
+
+function windvelocityGet(promesse,measure){
+
+  let measureValueDate = {date:[],value:[]}
+
+
+  for (let index = 0; index < promesse['groupRows'][0]['rows'].length; index++) {
+
+    measureValueDate["date"].push(new Date(promesse['groupRows'][0]['rows'][index]["date"]));
+    measureValueDate["value"].push({});
+    measureValueDate["value"][index]["avg"] = promesse['groupRows'][0]['rows'][index]["wind_avg"];
+    measureValueDate["value"][index]["min"] = promesse['groupRows'][0]['rows'][index]["wind_min"];
+    measureValueDate["value"][index]["max"] = promesse['groupRows'][0]['rows'][index]["wind_max"];
+
+  }
+
+  measure["windvelocity"] = measureValueDate;
+
+  return measure;
+
+}
+
+function gpspositionGet(promesse,measure){
+
+  let measureValueDate = {date:[],value:[]}
+
+  console.log(promesse);
+  for (let index = 0; index < promesse['groupRows'][0]['rows'].length; index++) {
+
+    measureValueDate["date"].push(new Date(promesse['groupRows'][0]['rows'][index]["date"]));
+    measureValueDate["value"].push({});
+    measureValueDate["value"][index]["lat"] = promesse['groupRows'][0]['rows'][index]["latitude"];
+    measureValueDate["value"][index]["lon"] = promesse['groupRows'][0]['rows'][index]["longitude"];
+    measureValueDate["value"][index]["alt"] = promesse['groupRows'][0]['rows'][index]["altitude"];
+
+  }
+
+  measure["gpsposition"] = measureValueDate;
+
+  return measure;
+
+}
+
+function dateGet(req){
 
   let dates = [];
-  // Si la date est fournie
+
   if (req.params.date != undefined) {
     // Récuperer les dates si présentes
     dates = req.params.date.split(',');
@@ -47,90 +100,104 @@ router.get('/:measure/:date?', function(req, res, next) {
     }
   }
 
+  return dates;
+}
+
+function QuerySent(dates, element,  promises){
+
   // création de la requête
   let queryString = '';
 
   // s'il n'y a aucunes dates
   if (dates.length == 0) {
     queryString = `
-    select * from ${req.params.measure}
+    select * from ${element}
     GROUP BY * ORDER BY DESC LIMIT 1;
   `;
   } else {
     queryString = `
-    select * from ${req.params.measure}
+    select * from ${element}
     where date >= ${dates[0]} and date <= ${dates[1]}
   `;
   }
 
-  let measures = {};
+  promises.push(influx.query(queryString))
 
-  influx.query(queryString)
-  .then( result => {
+  return promises;
+}
 
-    let measure_name = "";
+/* GET data measures */
+router.get('/:measure/:date?', function(req, res, next) {
 
-    // Ordonner le résultat :
-    for (let i=0; i < result['groupRows'].length; i++) {
+  // Récuperer les mesures demandées
+  
+  let listMeasure = req.params.measure.split(',');
+  let date = dateGet(req);
+  let measure = {};
+  let promises = [];
 
-      measure_name = result['groupRows'][i]['name'];
+  for (let index = 0; index < listMeasure.length; index++) {
 
-      if (measure_name == 'gps_GGA') {
-        measure_name = 'gpsposition';
-      }
-      if (measure_name == 'luminosity') {
-        measure_name = 'brightness';
-      }
+    if(listMeasure[index] == "temperature") {
 
-      // Si clé déja présente
-      if (measures[measure_name] == undefined) {
+      promises = QuerySent(date,"temperature", promises);
+      
+    }else if (listMeasure[index] == "hygrometry") {
 
-        if (measure_name == 'wind') {
-          measures['winddirection'] = [];
-          measures['windvelocity'] = [];
-        } else {
-          measures[measure_name] = [];
-        }
-      }
+      promises = QuerySent(date,"humidity",promises);
+      
+    } else if (listMeasure[index] == "pressure" ) {
 
-      for (let j=0; j < result['groupRows'][i]['rows'].length; j++) {
-        // si la clé est windvelocity
-        if (measure_name == 'wind') {
+      promises = QuerySent(date, "pressure", promises);
+      
+    } else if (listMeasure[index] == "rainfall") {
 
-          measures['winddirection'].push(
-            {
-              'date' : new Date(result['groupRows'][i]['rows'][j]['date']).toISOString(),
-              'value' : result['groupRows'][i]['rows'][j]['wind_heading']
-            });
+      promises = QuerySent(date, "rainfall", promises);
+      
+    } else if (listMeasure[index] == "brightness") {
+
+      promises = QuerySent(date, "brightness", promises);
+      
+    } else if (listMeasure[index] == "winddirection") {
+      
+      promises = QuerySent(date, "wind", promises);
+
+    } else if (listMeasure[index] == "windvelocity") {
+
+      promises = QuerySent(date, "wind", promises);
+      
+    } else {
+      
+      promises = QuerySent(date, "gps", promises);
+    }
+
+  }
+    Promise.all(promises).then(promesses => {
+
+      for (let index = 0; index < promesses.length; index++) {
+        if (listMeasure[index]== "winddirection") {
+
+          measure = winddirectionGet(promesses[index],measure);
           
-          measures['windvelocity'].push(
-            {
-              'date' : new Date(result['groupRows'][i]['rows'][j]['date']).toISOString(),
-              'avg' : result['groupRows'][i]['rows'][j]['wind_avg'],
-              'max' : result['groupRows'][i]['rows'][j]['wind_max'],
-              'min' : result['groupRows'][i]['rows'][j]['wind_min']
-            });
-        } // si la clé est GPS
-        else if (measure_name == 'gpsposition') {
-          measures[measure_name].push(
-          {
-            'latitude' : result['groupRows'][i]['rows'][j]['latitude'],
-            'longitude' : result['groupRows'][i]['rows'][j]['longitude'],
-            'altitude' : result['groupRows'][i]['rows'][j]['altitude']
-          });
+        }else if (listMeasure[index] == "windvelocity") {
 
+          measure = windvelocityGet(promesses[index],measure);
+          
+        } else if (listMeasure[index] == "gpsposition") {
+
+          measure = gpspositionGet(promesses[index],measure);
+          
         } else {
-          measures[measure_name].push(
-          {
-            'date' : new Date(result['groupRows'][i]['rows'][j]['date']).toISOString(),
-            'value' : result['groupRows'][i]['rows'][j]['values']
-          }); 
+         
+          measure = measureGet(listMeasure[index],promesses[index],measure);
+
         }
+        
       }
 
-  };
-  res.json(measures)
-  });
+    res.send(measure);
+      
+    });
 
 });
 
