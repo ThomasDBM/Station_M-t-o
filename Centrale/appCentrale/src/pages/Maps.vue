@@ -10,7 +10,10 @@
       @update:center="centerUpdated"
     >
       <l-tile-layer ref="tilelayer" :url="url"></l-tile-layer>
-      <Pointer v-for="Station in Stations" :key="Station.id" :marker="Station" ></Pointer>
+      <li v-for="(station,index) in ChoosenStations" :key="index">
+        <md-checkbox v-model="string" @change="onChange" v-bind:value="station">{{station}}</md-checkbox>
+      </li>
+      <Pointer v-for="Station in Stations" :key="Station.id" :marker="Station"></Pointer>
     </l-map>
   </div>
 </template>
@@ -24,10 +27,12 @@ export default {
   components: {
     LMap,
     LTileLayer,
-    Pointer
+    Pointer,
   },
   data() {
     return {
+      string : null,
+      renderComponent : true,
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       center: [49.1193089, 6.1757156],
       zoom: 12,
@@ -40,6 +45,11 @@ export default {
       ]
     };
   },
+  computed : {
+    ChoosenStations(){
+      return this.$store.state.Stations;
+    }
+  },
   methods: {
     zoomUpdated(zoom) {
       this.zoom = zoom;
@@ -48,6 +58,30 @@ export default {
     centerUpdated(center) {
       this.center = center;
     },
+    onChange() {
+      console.log("changemment de sonde :");
+
+      this.updateCoordStations();
+
+      this.renderComponent = false;
+        this.$nextTick(() => {
+          // Add the component back in
+          this.renderComponent = true;
+      });
+    },
+    updateCoordStations() {
+      
+      for (let i; i < 5; i++) {
+        fetch("http://"+this.string+":8080/data/gpsposition")
+        .then(response => response.json())
+        .then(result => {
+          console.log('blabla');
+          console.log(result);
+          //this.Stations[i+1].coordinates = [result.lat, result.lon];
+        })
+      }
+    },
   },
 };
+
 </script>
