@@ -76,7 +76,7 @@ export default {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
     OnChange(){
-      this.$store.commit('SetStations',this.string)
+      this.$store.commit('SetStations',this.string);
       console.log(this.$store.state.Stations);
     }
   },
