@@ -7,9 +7,7 @@
   >
     <div class="logo">
       <a href="#" class="simple-text logo-mini">
-        <div class="logo-img">
-          <img :src="imgLogo" alt="" />
-        </div>
+      <img :src="imgLogo" alt="" />
       </a>
 
       <a
@@ -55,7 +53,7 @@ export default {
     },
     imgLogo: {
       type: String,
-      default: require("@/assets/img/vue-logo.png"),
+      default: require("@/assets/img/M-T-O.png"),
     },
     sidebarItemColor: {
       type: String,
