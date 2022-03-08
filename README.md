@@ -16,7 +16,7 @@ Read the weather data from the raspberry and store it in a database named 'measu
 
 Retrieve the data stored in the 'measures_station' database and format it to make it accessible on port 8080.
 
-## Centrale
+## Central
 
 Configurable dashboard.
 <br/>The user has the ability to view data extracted from the API on one or more probes over defined time periods.
