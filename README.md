@@ -28,3 +28,6 @@ To execute, launch:
 ```
 ./start.sh
 ```
+
+## Save data
+
