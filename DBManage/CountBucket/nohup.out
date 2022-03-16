@@ -1,0 +1,28 @@
+
+> start
+> node watch.js
+
+
+> start
+> node watch.js
+
+(node:18144) UnhandledPromiseRejectionWarning: Error: A 404 Not Found error occurred: {"error":"database not found: \"measures_station\""}
+
+    at IncomingMessage.<anonymous> (/home/pi/fakesonde/DBManage/CountBucket/node_modules/influx/lib/src/pool.js:50:38)
+    at IncomingMessage.emit (events.js:326:22)
+    at endReadableNT (_stream_readable.js:1241:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)
+(node:18144) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:18144) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+
+> start
+> node watch.js
+
+
+> start
+> node watch.js
+
+
+> start
+> node watch.js
+
