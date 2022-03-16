@@ -22,3 +22,9 @@ Configurable dashboard also accessible on port 8080.
 <br/>The user has the ability to view data extracted from the API on one or more probes over defined time periods.
 <br/>In addition, a map section allows the user to see the geographical position of selected probes.
 
+## Project launch
+
+To execute, launch:
+```
+./start.sh
+```
