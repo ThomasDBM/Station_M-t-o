@@ -14,20 +14,22 @@ Read the weather data from the raspberry and store it in a database named 'measu
 
 ## API
 
-Retrieve the data stored in the 'measures_station' database and format it to make it accessible on port 8080.
+Retrieve the data stored in the 'measures_station' database and format it to make piensg032:8080/data
 
 ## Central
 
-Configurable dashboard also accessible on port 8080.
+Configurable dashboard also accessible at piensg032:8080
 <br/>The user has the ability to view data extracted from the API on one or more probes over defined time periods.
 <br/>In addition, a map section allows the user to see the geographical position of selected probes.
 
 ## Project launch
 
-To execute, launch:
-```
-./start.sh
-```
+The project is automaticly launch with the routine startMTO.service whane the respberyPi is start.
+If it doenst work you can launch it whith the script atart.sh locate in /usr/bin.
 
-## Save data
+## Modification
+
+If you make any modification to Centrale code and want to deploy it :
+ - build the project
+ - place the file which compose the dist directory to /API/api/public and delete the old one wich was in this directory
 
