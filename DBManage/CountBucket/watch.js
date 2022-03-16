@@ -21,7 +21,7 @@ influx.getDatabaseNames()
         influx.writePoints([
         {
             measurement: 'rainfall',
-            fields: { date, value:1}
+            fields: { date, values: 1}
         }
     ])
   });

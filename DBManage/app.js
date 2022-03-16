@@ -80,7 +80,7 @@ influx.writePoints([
   {
     measurement: 'gps',
     fields: { 
-      time:date,
+      date,
       latitude:parseFloat(content.loc["geojson"]["coordinates"][1]), 
       longitude:parseFloat(content.loc["geojson"]["coordinates"][0]), 
       altitude:parseFloat(0) 
