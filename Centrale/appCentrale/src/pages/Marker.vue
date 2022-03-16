@@ -1,7 +1,5 @@
 <template>
-  <l-marker
-    :lat-lng="this.coordinates"
-  >
+  <l-marker :lat-lng="this.coordinates">
     <l-icon ref="icon">
       <md-icon>location_on</md-icon>
     </l-icon>
@@ -9,14 +7,14 @@
 </template>
 
 <script>
-import { LIcon, LMarker } from 'vue2-leaflet'
+import { LIcon, LMarker } from "vue2-leaflet";
 export default {
   components: { LIcon, LMarker },
   props: {
     station: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -24,11 +22,14 @@ export default {
     };
   },
   mounted() {
-      fetch("http://" + this.station + ":8080/data/gpsposition")
-        .then((response) => response.json())
-        .then((result) => {
-          this.coordinates = [result.gpsposition['value'][0].lat, result.gpsposition['value'][0].lon];
-        });
+    fetch("http://" + this.station + ":8080/data/gpsposition")
+      .then((response) => response.json())
+      .then((result) => {
+        this.coordinates = [
+          result.gpsposition["value"][0].lat,
+          result.gpsposition["value"][0].lon,
+        ];
+      });
   },
-}
+};
 </script>

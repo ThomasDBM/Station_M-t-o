@@ -1,0 +1,8 @@
+[Unit]
+Description=weather fake data generator
+
+[Service]
+ExecStart=/usr/bin/start.sh
+
+[Install]
+WantedBy=multi-user.target

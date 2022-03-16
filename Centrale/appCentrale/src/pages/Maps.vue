@@ -10,7 +10,11 @@
       @update:center="centerUpdated"
     >
       <l-tile-layer ref="tilelayer" :url="url"></l-tile-layer>
-      <Pointer v-for="(station,index) in this.$store.state.Stations" :key="index" :station="station"></Pointer>
+      <Pointer
+        v-for="(station, index) in this.$store.state.Stations"
+        :key="index"
+        :station="station"
+      ></Pointer>
     </l-map>
   </div>
 </template>
@@ -18,7 +22,7 @@
 <script>
 import { LMap, LTileLayer } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
-import Pointer from './Marker.vue'
+import Pointer from "./Marker.vue";
 
 export default {
   components: {
@@ -30,7 +34,7 @@ export default {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       center: [49.1193089, 6.1757156],
-      zoom: 12
+      zoom: 12,
     };
   },
   methods: {
@@ -41,7 +45,6 @@ export default {
       this.center = center;
     },
     onChange() {
-      console.log("changemment de sonde 2:");
 
       this.updateCoordStations();
 
