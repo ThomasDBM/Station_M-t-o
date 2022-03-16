@@ -26,34 +26,70 @@ export default {
   data() {
     return {
       selected: [],
-      tableDatas: [{
-        mesure: "none",
-        date: "none",
-        value: "none"
-      }],
+      tableDatas: [
+        {
+          mesure: "none",
+          date: "none",
+          value: "none",
+        },
+      ],
     };
   },
   methods: {
     getDatas() {
-      console.log(this.sonde);
-      fetch("http://"+this.sonde+":8080/data/temperature,hygrometry,pressure,rainfall,brightness,winddirection,windvelocity,gpsposition")
-      .then(response => response.json())
-      .then(result => {
-        this.tableDatas[0]["mesure"] = "temperature";
-        this.tableDatas[0]["date"] = result["temperature"]["date"][0];
-        this.tableDatas[0]["value"] = result["temperature"]["value"][0];
-        this.tableDatas[1] = {mesure:"hygrometry", date: result["hygrometry"]["date"][0], value:result["hygrometry"]["value"][0]};
-        this.tableDatas[2] = {mesure:"pressure", date: result["pressure"]["date"][0], value:result["pressure"]["value"][0]};
-        this.tableDatas[3] = {mesure:"rainfall", date: result["rainfall"]["date"][0], value:result["rainfall"]["value"][0]};
-        this.tableDatas[4] = {mesure:"brightness", date: result["brightness"]["date"][0], value:result["brightness"]["value"][0]};
-        this.tableDatas[5] = {mesure:"wind direction", date: result["winddirection"]["date"][0], value:result["winddirection"]["value"][0]};
-        this.tableDatas[6] = {mesure:"wind velocity", date: result["windvelocity"]["date"][0], value:result["windvelocity"]["value"][0]["min"]};
-        this.tableDatas[7] = {mesure:"position", date: result["gpsposition"]["date"][0], value: result["gpsposition"]["value"][0]["lon"]+ "," + result["gpsposition"]["value"][0]["lat"]};
-      })
-    }
+      fetch(
+        "http://" +
+          this.sonde +
+          ":8080/data/temperature,hygrometry,pressure,rainfall,brightness,winddirection,windvelocity,gpsposition"
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          this.tableDatas[0]["mesure"] = "temperature";
+          this.tableDatas[0]["date"] = result["temperature"]["date"][0];
+          this.tableDatas[0]["value"] = result["temperature"]["value"][0];
+          this.tableDatas[1] = {
+            mesure: "hygrometry",
+            date: result["hygrometry"]["date"][0],
+            value: result["hygrometry"]["value"][0],
+          };
+          this.tableDatas[2] = {
+            mesure: "pressure",
+            date: result["pressure"]["date"][0],
+            value: result["pressure"]["value"][0],
+          };
+          this.tableDatas[3] = {
+            mesure: "rainfall",
+            date: result["rainfall"]["date"][0],
+            value: result["rainfall"]["value"][0],
+          };
+          this.tableDatas[4] = {
+            mesure: "brightness",
+            date: result["brightness"]["date"][0],
+            value: result["brightness"]["value"][0],
+          };
+          this.tableDatas[5] = {
+            mesure: "wind direction",
+            date: result["winddirection"]["date"][0],
+            value: result["winddirection"]["value"][0],
+          };
+          this.tableDatas[6] = {
+            mesure: "wind velocity",
+            date: result["windvelocity"]["date"][0],
+            value: result["windvelocity"]["value"][0]["min"],
+          };
+          this.tableDatas[7] = {
+            mesure: "position",
+            date: result["gpsposition"]["date"][0],
+            value:
+              result["gpsposition"]["value"][0]["lon"] +
+              "," +
+              result["gpsposition"]["value"][0]["lat"],
+          };
+        });
+    },
   },
   mounted() {
     this.getDatas();
-  }
+  },
 };
 </script>
