@@ -13,10 +13,13 @@ function measureGet(nameMeasure,promesse,measure){
 
       let measureValueDate = {date:[],value:[]}
 
+      if (promesse['groupRows'][0]) {
 
       for (let index = 0; index < promesse['groupRows'][0]['rows'].length; index++) {
         measureValueDate["date"].push(new Date(promesse['groupRows'][0]['rows'][index]["date"]));
         measureValueDate["value"].push(promesse['groupRows'][0]['rows'][index]["values"]);
+      }
+        
       }
 
 
@@ -156,7 +159,7 @@ router.get('/:measure/:date?', function(req, res, next) {
       
     } else if (listMeasure[index] == "brightness") {
 
-      promises = QuerySent(date, "brightness", promises);
+      promises = QuerySent(date, "luminosity", promises);
       
     } else if (listMeasure[index] == "winddirection") {
       
